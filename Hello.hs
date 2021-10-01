@@ -9,5 +9,6 @@ myhtml =
             (concat_
                 (p_ "Paragraph #1")
                 (p_ "Paragraph #2")))
+
 -- level 3
 main = putStrLn (render myhtml)
