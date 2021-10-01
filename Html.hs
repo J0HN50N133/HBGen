@@ -4,6 +4,7 @@ module Html
     , Node
     , html_
     , p_
+    , h1_
     , concat_
     , render
     ) where
