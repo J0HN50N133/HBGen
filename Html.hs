@@ -40,13 +40,31 @@ html_  title content =
         )
     )
 body_  = Node . el BODY
-title_ = Node . el TITLE
 head_  = Node . el HEAD
-p_     = Node . el P
-h1_    = Node . el H1
+title_ = Node . el TITLE . escape
+p_     = Node . el P . escape
+h1_    = Node . el H1 . escape
 concat_ (Node s1) (Node s2) = Node (s1 <> s2)
 
 -- level 2
+render html =
+    case html of
+      Html str -> str
+
+escape :: String -> String
+escape =
+    let
+        escapeChar c =
+            case c of
+              '<'  -> "&lt;"
+              '>'  -> "&gt;"
+              '&'  -> "&amp;"
+              '"'  -> "&quot;"
+              '\'' -> "&#39;"
+              _    -> [c]
+    in
+        concatMap escapeChar
+
 myhtml =
     html_
         "My title"
@@ -55,9 +73,4 @@ myhtml =
             (concat_
                 (p_ "Paragraph #1")
                 (p_ "Paragraph #2")))
-render html =
-    case html of
-      Html str -> str
 
--- level 3
-main = putStrLn (render myhtml)
