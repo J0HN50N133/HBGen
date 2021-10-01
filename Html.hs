@@ -5,7 +5,11 @@ module Html
     , html_
     , p_
     , h1_
-    , concat_
     , render
+    , code_
+    , ul_
+    , ol_
+    , append_
+    , concat_
     ) where
 import Html.Internal
