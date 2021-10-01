@@ -13,8 +13,13 @@ newtype Node
   = Node String
 type Title
   = String
+
 getNodeString :: Node -> String
 getNodeString (Node str) = str
+
+instance Semigroup Node where
+  (<>) n1 n2 =
+    Node (getNodeString n1 <> getNodeString n2)
 
 -- level 2: EDSL
 html_ :: Title -> Node -> Html
@@ -23,19 +28,31 @@ html_  title content =
         el HTML (
             el HEAD (el TITLE title)
             <> el BODY (getNodeString content)))
+
+body_ :: String -> Node
 body_  = Node . el BODY
+
+head_ :: String -> Node
 head_  = Node . el HEAD
+
+title_ :: String -> Node
 title_ = Node . el TITLE . escape
+
+p_ :: String -> Node
 p_     = Node . el P . escape
+
+h1_ :: String -> Node
 h1_    = Node . el H1 . escape
+
+code_ :: String -> Node
 code_  = Node . el PRE . escape
+
 ul_ :: [Node] -> Node
 ul_    = Node . el UL . concatMap (el LI . getNodeString)
+
 ol_ :: [Node] -> Node
 ol_    = Node . el OL . concatMap (el LI . getNodeString)
 
-append_ :: Node -> Node -> Node
-append_ (Node s1) (Node s2) = Node (s1 <> s2)
 concat_ :: [Node] -> Node
 concat_ = Node . concatMap getNodeString
 

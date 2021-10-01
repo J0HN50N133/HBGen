@@ -9,7 +9,6 @@ module Html
     , code_
     , ul_
     , ol_
-    , append_
     , concat_
     ) where
 import Html.Internal

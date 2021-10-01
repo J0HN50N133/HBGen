@@ -19,6 +19,8 @@ myhtml =
                 \int main(int argc, const char* argv[]){\n\
                 \    printf(\"Hello world!\");\n\
                 \}"
+            , p_ "Paragraph #1"
+            <>p_ "Paragraph #2"
             ])
 
 -- level 3
