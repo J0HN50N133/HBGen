@@ -1,24 +1,30 @@
 module Parser where
 
+import Data.Maybe
 import Markup
 
 parse :: String -> Document
-parse = parseLines [] . lines
+parse = parseLines Nothing . lines
 
-parseLines :: [String] -> [String] -> Document
-parseLines currentParagraph txts =
-    let
-        paragraph = Paragraph (unlines (reverse currentParagraph))
-        -- reverse cuz we accumulate result at head
-    in
+parseLines :: Maybe Structure -> [String] -> Document
+parseLines context txts =
         case txts of
-          [] -> [paragraph]
+          [] -> maybeToList context
           currentLine : rest ->
-              if trim currentLine == ""
+            let
+              line = trim currentLine
+            in
+              if line == ""
                  then
-                    paragraph : parseLines [] rest
+                    maybe id (:) context (parseLines Nothing rest)
                  else
-                    parseLines (currentLine : currentParagraph) rest
+                    case context of
+                      Just (Paragraph p) -> 
+                        -- unwords here is extremely slow
+                        parseLines (Just (Paragraph (unwords [p, line]))) rest
+                      _ ->
+                        maybe id (:) context (parseLines (Just (Paragraph line)) rest)
+
 
 trim :: String -> String
 trim = unwords . words
