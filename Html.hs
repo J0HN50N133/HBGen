@@ -4,11 +4,12 @@ module Html
     , Node
     , html_
     , p_
-    , h1_
+    , h_
     , render
     , code_
     , ul_
     , ol_
     , concat_
+    , empty_
     ) where
 import Html.Internal

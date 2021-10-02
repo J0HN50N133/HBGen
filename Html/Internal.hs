@@ -1,10 +1,12 @@
 module Html.Internal where
 import Data.Char
 import Text.Printf ( printf )
+import Numeric.Natural
+import Data.Foldable
 
 
 -- level 0 * TagType
-data TagType = HTML | BODY | TITLE | HEAD | H1 | P | UL | OL | LI | PRE deriving(Show)
+data TagType = HTML | BODY | TITLE | HEAD | H1 | H2 | H3 | H4 | H5 | H6 | P | UL | OL | LI | PRE deriving(Show)
 
 -- level 1: EDSL Type
 newtype Html
@@ -20,6 +22,8 @@ getNodeString (Node str) = str
 instance Semigroup Node where
   (<>) n1 n2 =
     Node (getNodeString n1 <> getNodeString n2)
+instance Monoid Node where
+  mempty = empty_
 
 -- level 2: EDSL
 html_ :: Title -> Node -> Html
@@ -41,8 +45,14 @@ title_ = Node . el TITLE . escape
 p_ :: String -> Node
 p_     = Node . el P . escape
 
-h1_ :: String -> Node
-h1_    = Node . el H1 . escape
+h_ :: Natural -> String -> Node
+h_ n =Node . (case n of
+                1 -> el H1
+                2 -> el H2
+                3 -> el H3
+                4 -> el H4
+                5 -> el H5
+                _ -> el H6) . escape
 
 code_ :: String -> Node
 code_  = Node . el PRE . escape
@@ -53,8 +63,11 @@ ul_    = Node . el UL . concatMap (el LI . getNodeString)
 ol_ :: [Node] -> Node
 ol_    = Node . el OL . concatMap (el LI . getNodeString)
 
+empty_ :: Node
+empty_ = Node ""
+
 concat_ :: [Node] -> Node
-concat_ = Node . concatMap getNodeString
+concat_ = fold
 
 -- level 3: Render
 render :: Html -> String
