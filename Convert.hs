@@ -1,5 +1,6 @@
 module Convert where
 
+import qualified Parser
 import qualified Markup
 import qualified Html
 
@@ -19,3 +20,6 @@ convertStructure structure =
 
 convert :: Html.Title -> Markup.Document -> Html.Html
 convert title = Html.html_ title . foldMap convertStructure
+
+process :: Html.Title -> String -> String
+process title = Html.render . convert title . Parser.parse
