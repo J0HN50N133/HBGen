@@ -12,7 +12,7 @@ data Structure
   = Header  Natural String
   | Paragraph String
   | UnorderedList [String]
-  | OrdereredList [String]
+  | OrderedList [String]
   | CodeBlock [String]
-  deriving Show
+  deriving (Show, Eq)
 
