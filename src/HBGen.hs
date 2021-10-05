@@ -1,9 +1,11 @@
 {-# LANGUAGE LambdaCase #-}
-module Main where
+module HBGen
+  ( main )
+    where
 
 import System.Directory
 import System.Environment
-import Convert
+import HBGen.Convert
 
 whenIO :: IO Bool -> IO () -> IO ()
 whenIO cond action =

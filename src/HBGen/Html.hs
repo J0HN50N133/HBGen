@@ -1,4 +1,4 @@
-module Html
+module HBGen.Html
     ( Html
     , Title
     , Node
@@ -12,4 +12,4 @@ module Html
     , concat_
     , empty_
     ) where
-import Html.Internal
+import HBGen.Html.Internal

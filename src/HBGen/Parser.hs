@@ -1,9 +1,9 @@
-module Parser
+module HBGen.Parser
   ( parse )
   where
 import Numeric.Natural
 import Data.Maybe
-import Markup
+import HBGen.Markup
 
 parse :: String -> Document
 parse = parseLines Nothing . lines

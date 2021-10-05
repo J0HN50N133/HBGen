@@ -1,4 +1,4 @@
-module Html.Internal where
+module HBGen.Html.Internal where
 import Data.Char
 import Text.Printf ( printf )
 import Numeric.Natural

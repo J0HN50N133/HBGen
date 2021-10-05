@@ -1,4 +1,4 @@
-module Markup
+module HBGen.Markup
     ( Document
     , Structure(..)
     )
