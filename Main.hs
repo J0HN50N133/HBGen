@@ -23,18 +23,20 @@ confirm =
             confirm
 
 main :: IO ()
-main =
-  getArgs >>= \case
-      [] ->
-        getContents >>= (putStrLn . process "")
-      [ifName, ofName] ->
-        doesFileExist ofName >>= \exist ->
-          let
-            writeResult = readFile ifName >>= \content ->
-              writeFile ofName (process ifName content)
-          in
-          if exist
-           then whenIO confirm writeResult
-           else writeResult
-      _ ->
+main = do
+  args <- getArgs
+  case args of
+    -- No args
+    [] -> do
+      contents <- getContents
+      putStrLn (process "" contents)
+    -- with input and output
+    [ifName, ofName] -> do
+      exist <- doesFileExist ofName
+      content <- readFile ifName
+      let writeResult = writeFile ofName (process ifName content)
+      if exist
+         then whenIO confirm writeResult
+         else writeResult
+    _  ->
         putStrLn "Usage: runghc Main.hs [-- <input-file> <output-file>]"
