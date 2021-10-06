@@ -1,44 +1,23 @@
-{-# LANGUAGE LambdaCase #-}
-module HBGen
-  ( main )
-    where
+module HBGen 
+  ( convertSingle
+  , convertDirectory
+  , process
+  )
+  where
 
-import System.Directory
-import System.Environment
-import HBGen.Convert
+import System.IO ( Handle, hGetContents, hPutStrLn )
+import HBGen.Convert ( convert )
+import HBGen.Html.Internal ( Title, render )
+import HBGen.Parser ( parse )
 
-whenIO :: IO Bool -> IO () -> IO ()
-whenIO cond action =
-  cond >>= \result ->
-    if result
-      then action
-      else pure ()
+convertSingle :: Title -> Handle -> Handle -> IO ()
+convertSingle title input output = do
+  content <- hGetContents input
+  hPutStrLn output (process title content)
 
-confirm :: IO Bool
-confirm =
-  putStrLn "Output file already exist, do you want to overwrite it? (y/n)" *>
-    getLine >>= \case
-        "y" -> pure True
-        "n" -> pure False
-        _ ->
-          putStrLn "Invalid response. use y or n" *>
-            confirm
+convertDirectory :: FilePath -> FilePath -> IO()
+convertDirectory = error "Not implemented yet."
 
-main :: IO ()
-main = do
-  args <- getArgs
-  case args of
-    -- No args
-    [] -> do
-      contents <- getContents
-      putStrLn (process "" contents)
-    -- with input and output
-    [ifName, ofName] -> do
-      exist <- doesFileExist ofName
-      content <- readFile ifName
-      let writeResult = writeFile ofName (process ifName content)
-      if exist
-         then whenIO confirm writeResult
-         else writeResult
-    _  ->
-        putStrLn "Usage: runghc Main.hs [-- <input-file> <output-file>]"
+
+process :: Title -> String -> String
+process title = render . convert title . parse

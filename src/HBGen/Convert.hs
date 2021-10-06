@@ -1,5 +1,4 @@
 module HBGen.Convert
-  ( process )
   where
 
 import qualified HBGen.Parser
@@ -22,6 +21,3 @@ convertStructure structure =
 
 convert :: HBGen.Html.Title -> HBGen.Markup.Document -> HBGen.Html.Html
 convert title = HBGen.Html.html_ title . foldMap convertStructure
-
-process :: HBGen.Html.Title -> String -> String
-process title = HBGen.Html.render . convert title . HBGen.Parser.parse
